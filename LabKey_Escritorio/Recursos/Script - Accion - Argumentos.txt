@@ -1,0 +1,4 @@
+-WindowStyle Hidden -NoProfile -ExecutionPolicy Bypass -File "C:\Users\jasc1\OneDrive\Escritorio\dist\InicioLabKey.ps1"
+
+
+-WindowStyle Hidden -NoProfile -ExecutionPolicy Bypass -File "C:\Ruta\al\archivo\de\inicio\archivo_de_inicio.ps1"
