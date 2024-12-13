@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Laboratorio</title>
+    <title>Gestión de Lugares por Horario</title>
     <link rel="stylesheet" href="../css/gestion.css">
-    <link rel="icon" type="image/x-icon" href="../../img/labkey_Mesa de trabajo 1.png">
     <link href='https://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet'>
+
 </head>
 <body>
     <header class="header">
@@ -16,7 +16,7 @@
             </a>
         </div>
         <div class="header-text">
-            <h2>Gestión de Laboratorio</h2>
+            <h2>Gestion de lugares</h2>
         </div>
         <div class="header-logo">
             <img src="../../img/labkey_Mesa de trabajo 1.png" alt="LabKey Logo" class="logo">
@@ -30,38 +30,34 @@
         </ul>
     </nav>
 
-    <div class="status-container">
-        <span>Disponible</span> <span class="color-box available"></span>
-        <span>Descompuesto</span> <span class="color-box disabled"></span>
-    </div>
-
     <main class="main-content">
-        <div class="card">
-            <h3>Seleccione equipos disponibles</h3>
-            <div class="grid-container">
-                <div class="grid" id="grid">
-                    <!-- Botones generados dinámicamente -->
-                </div>
-                <button class="accept-button" id="acceptBtn" disabled>Aceptar</button>
-            </div>
-        </div>
-
-        <div class="actions">
-            <button class="action-button enable" id="enableBtn">Habilitar equipos</button>
-            <button class="action-button disable" id="disableBtn">Inhabilitar equipos</button>
-            <button class="action-button add" id="addBtn">Agregar más lugares</button>
-        </div>
-
+        <section class="horario-selector">
+            <label for="horarioSelect" class="horario-label">Seleccione un Horario:</label>
+            <select id="horarioSelect" class="horario-dropdown">
+                <!-- Los horarios se cargarán dinámicamente aquí -->
+            </select>
+        </section>
+        <section id="gridContainer" class="grid-container">
+            <div id="grid" class="grid"></div>
+        </section>
+        <section class="controls">
+            <section class="controls">
+                <button id="enableBtn" class="control-button">Habilitar Lugares</button>
+                <button id="disableBtn" class="control-button">Inhabilitar Lugares</button>
+                <button id="blockAllBtn" class="control-button">Bloquear Todos</button> <!-- Nuevo botón -->
+                <button id="unblockAllBtn" class="control-button">Desbloquear Todos</button> <!-- Nuevo botón -->
+                <button id="acceptBtn" class="control-button accept-button" disabled>Aceptar Cambios</button>
+            </section>
+            
+        </section>
         <div id="message" class="message"></div>
-
         <div id="modal" class="modal">
             <div class="modal-content">
                 <p id="modalMessage"></p>
-                <button onclick="closeModal()">Cerrar</button>
+                <button class="modal-close-button">Cerrar</button>
             </div>
         </div>
     </main>
-
-    <script src="../js/gestion.js"></script>
+    <script src="../js/gestion.js" type="module"></script>
 </body>
 </html>

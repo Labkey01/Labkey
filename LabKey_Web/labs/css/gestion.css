@@ -1,3 +1,232 @@
+/* Reset general */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Comfortaa', sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+/* Header */
+.header {
+    background-color: #e0e0e0;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.header-title {
+    font-size: 24px;
+    color: #1E2741;
+    font-weight: bold;
+}
+
+/* Main content */
+.main-content {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Horario Selector */
+.horario-selector {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.horario-label {
+    font-size: 18px;
+    font-weight: bold;
+    color: #1E2741;
+}
+
+.horario-dropdown {
+    padding: 10px 15px;
+    font-size: 16px;
+    border: 2px solid #1E2741;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #333;
+    cursor: pointer;
+}
+
+/* Grid Container */
+.grid-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(8, 40px);
+    grid-gap: 10px;
+}
+
+.place {
+    padding: 10px;
+    background-color: #fff;
+    border: 2px solid #1E2741;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.place.disabled {
+    background-color: yellow;
+    border-color: #FFC107;
+    cursor: not-allowed;
+    color: #333;
+}
+
+.place.available {
+    background-color: #fff;
+}
+
+.place:hover:not(.disabled) {
+    transform: scale(1.1);
+    background-color: #e0f7fa;
+}
+
+/* Buttons */
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.control-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Comfortaa';
+    font-size: 16px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.control-button:hover {
+    transform: scale(1.05);
+}
+
+#enableBtn {
+    background-color: #00A3D9;
+    color: white;
+}
+
+#enableBtn:hover {
+    background-color: #0078A2;
+}
+
+#disableBtn {
+    background-color: #1E2741;
+    color: white;
+}
+
+#disableBtn:hover {
+    background-color: #14202E;
+}
+
+#acceptBtn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#acceptBtn:disabled {
+    background-color: gray;
+    cursor: not-allowed;
+}
+
+/* Message */
+.message {
+    color: white;
+    font-size: 16px;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    display: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.message.active {
+    display: block;
+}
+
+.message.add {
+    background-color: #4CAF50;
+    border: 2px solid #388E3C;
+}
+
+.message.enable {
+    background-color: #00A3D9;
+    border: 2px solid #0078A2;
+}
+
+.message.disable {
+    background-color: #1E2741;
+    border: 2px solid #14202E;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    padding: 20px;
+    background: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    text-align: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    text-align: center;
+}
+
+.modal-content p {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.modal-content button {
+    padding: 10px 20px;
+    background-color: #1E2741;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.modal-content button:hover {
+    background-color: #14202E;
+}
+
+/* Utility classes */
+.hidden {
+    display: none;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -6,25 +235,17 @@
 
 body {
     font-family: 'Comfortaa';
+    background-color: #f5f5f5;
 }
 
 .header {
+    font-family: 'Comfortaa';
     background-color: #e0e0e0;
     padding: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
-
-.header-text h2 {
-    font-size: 24px;
-    color: #1E2741;
-}
-
-.icon-home {
-    width: 80px;
-}
-
 .menu-nav ul li a.active {
     color: #333; /* Color más oscuro */
     font-weight: bold; /* Negrita para resaltar */
@@ -92,131 +313,129 @@ body {
     color: #1E2741;
 }
 
-.logo {
+.header-text h2 {
+    font-family: 'Comfortaa';
+    font-size: 24px;
+    color: #1E2741;
+}
+
+.icon-home {
     width: 80px;
 }
 
-.main-content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
+.logo {
+    width: 70px;
+}
+
+.search-section {
     margin: 20px;
-    margin-top: 70px;
-}
-
-.card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #f7f7f7;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 600px;
-}
-
-.status-container {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 10px;
-    margin-bottom: 10px;
-    margin-top: 50px;
-    
 }
 
-.color-box {
-    width: 20px;
-    height: 20px;
-    display: inline-block;
-    border: 1px solid black;
-    margin-left: 5px;
-}
-
-.available {
-    background-color: gray;
-}
-
-.disabled {
-    background-color: yellow;
-}
-
-.grid-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.grid {
-    display: grid;
-    grid-template-columns: repeat(8, 40px);
-    grid-gap: 10px;
-    margin: 20px 0;
-}
-
-.place {
+.dropdown {
     padding: 10px;
-    background-color: #fff;
-    border: 2px solid #1E2741;
+    background-color: #ccc;
+    border: none;
     border-radius: 5px;
-    cursor: pointer;
 }
 
-.place.disabled {
-    background-color: yellow;
-}
-
-.place.available {
-    background-color: white;
-}
-
-.accept-button {
+.search-button {
+    font-family: 'Comfortaa';
+    padding: 10px 20px;
     background-color: #1E2741;
     color: white;
     border: none;
-    padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
+}
+
+.student-list {
+    margin: 20px;
+    padding: 20px;
+    background-color: #dedede;
+    border-radius: 20px;
+    text-align: center;
+}
+
+.student-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.student-table th, .student-table td {
+    padding: 15px;
+    text-align: center;
+    border-bottom: 1px solid #ccc;
+}
+
+.student-table th {
+    background-color: #1E2741;
+    color: white;
+}
+
+.attend-button, .absent-button {
     font-family: 'Comfortaa';
-}
-
-.accept-button:disabled {
-    background-color: gray;
-    font-family: 'Comfortaa';
-}
-
-.actions {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 10px;
-}
-
-.action-button {
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    color: white;
-    font-family: 'Comfortaa';
+    margin: 5px;
 }
 
-.enable {
-    background-color: #00A3D9;
-}
-
-.disable {
+.attend-button {
     background-color: #1E2741;
+    color: white;
 }
 
-.message {
-    color: red;
-    font-size: 14px;
-    margin-top: 10px;
+.absent-button {
+    background-color: #ff5c5c;
+    color: white;
 }
 
-/* General styles */
+.submit-button {
+    font-family: 'Comfortaa';
+    margin-top: 20px;
+    padding: 15px 30px;
+    background-color: #4f8ac9;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+}
+
+
+.attendance-box {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    background-color: #ff5c5c;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    user-select: none;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#blockAllBtn{
+    background-color: red;
+    color: white;
+}
+
+#unblockAllBtn{
+    background-color: green;
+    color: white;
+}
+.attendance-box.present {
+    background-color: #4caf50;
+}
+
 .modal {
     display: none;
     position: fixed;
@@ -240,46 +459,3 @@ body {
     border-radius: 5px;
     cursor: pointer;
 }
-
-.action-button.add {
-    background-color: #4caf50;
-}
-
-.message {
-    color: white;
-    font-size: 16px;
-    margin-top: 10px;
-    padding: 10px;
-    border-radius: 5px;
-    text-align: center;
-    display: none;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-}
-
-.message.active {
-    display: block;
-}
-
-.message.add {
-    background-color: #4caf50;
-    border: 2px solid #388e3c;
-}
-
-.message.enable {
-    background-color: #00a3d9;
-    border: 2px solid #0078a2;
-}
-
-.message.disable {
-    background-color: #1e2741;
-    border: 2px solid #14202e;
-}
-
-/* Active button styles */
-.action-button.active {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    border: 2px solid #333;
-    font-weight: bold;
-    transform: scale(1.05);
-}
-

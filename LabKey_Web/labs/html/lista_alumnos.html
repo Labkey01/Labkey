@@ -11,7 +11,7 @@
 <body>
     <header class="header">
         <div class="header-logo">
-            <a href="../html/principal.html" >
+            <a href="../html/principal.html">
                 <img src="../../img/icons8-casa-manzana-100.png" alt="Home" class="icon-home">
             </a>
         </div>
@@ -42,7 +42,6 @@
                 <option value="12:00">12:00</option>
                 <option value="13:00">13:00</option>
                 <option value="14:00">14:00</option>
-                <!-- Más horas aquí -->
             </select>
             <button class="search-button" onclick="filterByHour()">Buscar</button>
         </section>
@@ -60,25 +59,12 @@
                     </tr>
                 </thead>
                 <tbody id="student-table-body">
-                    <!-- Fila de ejemplo -->
-                    <tr>
-                        <td>Juan Pérez</td>
-                        <td>12345</td>
-                        <td>juan@ejemplo.com</td>
-                        <td>Ingeniería</td>
-                        <td>4</td>
-                        <td>
-                            <div class="attendance-box" onclick="toggleAttendance(this)">X</div>
-                        </td>
-                    </tr>
-                    <!-- Repite más filas para más alumnos -->
                 </tbody>
             </table>
             <button class="submit-button" onclick="submitAttendance()">Subir lista de asistencia</button>
         </section>
     </main>
 
-    <!-- Modal -->
     <div id="modal" class="modal">
         <div class="modal-content">
             <p>La asistencia se ha subido correctamente.</p>
@@ -86,5 +72,5 @@
         </div>
     </div>
 </body>
-<script src="../js/lista_alumnos.js"></script>
+<script type="module" src="../js/lista_alumnos.js"></script>
 </html>
