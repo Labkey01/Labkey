@@ -43,6 +43,19 @@ async function fetchRecords() {
     }
 }
 
+document.getElementById("clearFilters").addEventListener("click", () => {
+    // Limpiar los valores de los campos de texto
+    document.getElementById("searchLab").value = "";
+    document.getElementById("searchBuilding").value = "";
+    document.getElementById("searchTime").value = "";
+
+    // Reiniciar los registros mostrados
+    currentPage = 1; // Reinicia la paginación
+    renderRecords(registros, currentPage); // Muestra todos los registros
+    handlePagination(registros); // Actualiza la paginación
+});
+
+
 // Filtrar registros por búsqueda
 const filterRecords = () => {
     const searchLabValue = searchLab.value.toLowerCase();
@@ -82,31 +95,52 @@ const renderRecords = (records, page) => {
 
 // Manejo de la paginación
 const handlePagination = (filteredRecords) => {
+    const totalPages = Math.ceil(filteredRecords.length / recordsPerPage); // Calcula el total de páginas
+
     prevPageButton.disabled = currentPage === 1;
-    nextPageButton.disabled = currentPage * recordsPerPage >= filteredRecords.length;
+    nextPageButton.disabled = currentPage === totalPages;
+
+    // Actualiza el indicador de página en formato "1/2"
+    currentPageSpan.textContent = `${currentPage}/${totalPages}`;
 
     prevPageButton.onclick = () => {
         if (currentPage > 1) {
             currentPage--;
             renderRecords(filteredRecords, currentPage);
+            currentPageSpan.textContent = `${currentPage}/${totalPages}`;
         }
     };
 
     nextPageButton.onclick = () => {
-        if (currentPage * recordsPerPage < filteredRecords.length) {
+        if (currentPage < totalPages) {
             currentPage++;
             renderRecords(filteredRecords, currentPage);
+            currentPageSpan.textContent = `${currentPage}/${totalPages}`;
         }
     };
 };
 
-// Descargar registros como Excel
-const downloadExcel = (filteredRecords) => {
-    const csvContent = "data:text/csv;charset=utf-8," +
-        ["Nombre,Laboratorio,Edificio,Horario,Fecha,Materia"]
-            .concat(filteredRecords.map(r => `${r.nombre},${r.laboratorio},${r.edificio},${r.horario},${r.fecha},${r.materia}`))
-            .join("\n");
 
+// Descargar registros como Excel
+const downloadExcelFromTable = () => {
+    // Obtiene todas las filas de la tabla, excepto la cabecera
+    const rows = document.querySelectorAll("#recordTableBody tr");
+    const csvRows = [];
+
+    // Agregar cabecera del CSV
+    csvRows.push("Nombre,Laboratorio,Edificio,Horario,Fecha,Materia");
+
+    // Recorrer las filas y obtener los datos
+    rows.forEach(row => {
+        const columns = row.querySelectorAll("td");
+        const rowData = Array.from(columns).map(col => `"${col.textContent.trim()}"`); // Encerrar en comillas dobles
+        csvRows.push(rowData.join(",")); // Unir columnas con comas
+    });
+
+    // Crear contenido CSV
+    const csvContent = "data:text/csv;charset=utf-8," + csvRows.join("\n");
+
+    // Crear enlace para descargar
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
@@ -115,6 +149,11 @@ const downloadExcel = (filteredRecords) => {
     link.click();
     document.body.removeChild(link);
 };
+
+// Vincular esta función al botón de descarga
+document.getElementById("downloadExcel").addEventListener("click", downloadExcelFromTable);
+
+
 
 // Event Listeners
 searchLab.addEventListener("input", () => {
@@ -142,6 +181,8 @@ downloadExcelButton.addEventListener("click", () => {
     const filteredRecords = filterRecords();
     downloadExcel(filteredRecords);
 });
+
+
 
 // Inicializar
 document.addEventListener("DOMContentLoaded", () => {

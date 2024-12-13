@@ -1,46 +1,49 @@
-import { fetchAPI } from "./properties/util.js";
-import { LKURI } from "./properties/properties.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+import { firebaseConfig } from "../js/properties/firebaseConfig.js";
 
 let currentPage = 1;
 let itemsPerPage = 5;
 let originalData = [];
 let filteredData = [];
 
-// Cargar los datos iniciales desde el servicio
-window.onload = async function () {
+// Inicializar Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// Función para cargar datos de registros y usuarios
+async function loadData() {
     try {
-        const accessToken = sessionStorage.getItem("accessToken");
-        if (!accessToken) {
-            window.location.href = "./inicio_sesion.html";
-            return;
-        }
+        const registrosSnapshot = await getDocs(collection(db, "registros"));
+        const registrosData = registrosSnapshot.docs.map(doc => doc.data());
 
-        // Consumir el servicio
-        originalData = await fetchAPI(`${LKURI}/registro/list-all`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${accessToken}`,
-            },
-        });
+        const usuariosSnapshot = await getDocs(collection(db, "usuarios"));
+        const usuariosData = usuariosSnapshot.docs.map(doc => doc.data());
 
-        if (!Array.isArray(originalData)) {
-            throw new Error("Los datos obtenidos no son válidos");
-        }
+        const usuariosMap = usuariosData.reduce((map, usuario) => {
+            map[usuario.matricula] = usuario.nombre;
+            return map;
+        }, {});
 
-        // Inicializar datos filtrados y renderizar tabla
+        originalData = registrosData.map(registro => ({
+            ...registro,
+            nombre: usuariosMap[registro.matricula] || "N/A"
+        }));
+
         filteredData = [...originalData];
         renderTable();
         handlePagination();
     } catch (error) {
-        console.error("Error al cargar los registros:", error.message);
-        alert("No se pudieron cargar los registros. Intenta nuevamente más tarde.");
+        console.error("Error al cargar los datos desde Firebase:", error.message);
+        alert("No se pudieron cargar los datos.");
     }
-};
+}
+
+window.onload = loadData;
 
 function renderTable() {
     const tableBody = document.getElementById("recordsTableBody");
-    tableBody.innerHTML = ""; // Limpiar la tabla
+    tableBody.innerHTML = "";
 
     const start = (currentPage - 1) * itemsPerPage;
     const end = start + itemsPerPage;
@@ -49,19 +52,18 @@ function renderTable() {
     paginatedData.forEach(row => {
         const newRow = document.createElement("tr");
         newRow.innerHTML = `
-            <td>${row.nombre}</td>
-            <td>${row.matricula}</td>
-            <td>${row.laboratorio}</td>
-            <td>${row.edificio}</td>
-            <td>${row.nequipo}</td>
-            <td>${row.fecha}</td>
-            <td>${row.hora}</td>
-            <td>${row.tiempo}</td>
+            <td>${row.nombre || "N/A"}</td>
+            <td>${row.matricula || "N/A"}</td>
+            <td>${row.usuario_sesion || "N/A"}</td>
+            <td>${row.nombre_equipo || "N/A"}</td>
+            <td>${row.fecha || "N/A"}</td>
+            <td>${row.hora || "N/A"}</td>
+            <td>${row.horas || 0} horas ${row.minutos || 0} minutos</td>
         `;
         tableBody.appendChild(newRow);
     });
 
-    document.getElementById("pageNumber").textContent = currentPage;
+    updatePageNumber();
 }
 
 function handlePagination() {
@@ -89,43 +91,48 @@ function handlePagination() {
 }
 
 function applyFilters() {
-    const labInput = document.getElementById("searchLab").value.toLowerCase();
-    const buildingInput = document.getElementById("searchBuilding").value.toLowerCase();
-    const dateInput = document.getElementById("searchDate").value;
-    const timeInput = document.getElementById("searchTime").value;
+    const labInputElement = document.getElementById("searchLab");
+    const dateInputElement = document.getElementById("searchDate");
+    const timeInputElement = document.getElementById("searchTime");
+
+    const labInput = labInputElement ? labInputElement.value.toLowerCase() : "";
+    const dateInput = dateInputElement ? dateInputElement.value : "";
+    const timeInput = timeInputElement ? timeInputElement.value : "";
 
     filteredData = originalData.filter(row =>
-        (labInput === "" || row.laboratorio.toLowerCase().includes(labInput)) &&
-        (buildingInput === "" || row.edificio.toLowerCase().includes(buildingInput)) &&
+        (labInput === "" || (row.usuario_sesion || "").toLowerCase().includes(labInput)) &&
         (dateInput === "" || row.fecha === dateInput) &&
         (timeInput === "" || row.hora.startsWith(timeInput))
     );
 
-    currentPage = 1; // Reiniciar la paginación al aplicar filtros
+    currentPage = 1;
     renderTable();
     handlePagination();
 }
 
-// Limpiar filtros y restaurar datos originales
 function clearFilters() {
     document.getElementById("searchLab").value = "";
-    document.getElementById("searchBuilding").value = "";
     document.getElementById("searchDate").value = "";
     document.getElementById("searchTime").value = "";
 
     filteredData = [...originalData];
-    currentPage = 1; // Reiniciar la paginación
+    currentPage = 1;
     renderTable();
     handlePagination();
 }
 
-// Escuchar eventos en los campos de filtro
+function updatePageNumber() {
+    const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+    const pageNumberElement = document.getElementById("pageNumber");
+    pageNumberElement.textContent = `${currentPage}/${totalPages}`;
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("searchLab").addEventListener("input", applyFilters);
-    document.getElementById("searchBuilding").addEventListener("input", applyFilters);
     document.getElementById("searchDate").addEventListener("change", applyFilters);
     document.getElementById("searchTime").addEventListener("change", applyFilters);
-
-    // Botón para limpiar filtros
     document.getElementById("clearFiltersBtn").addEventListener("click", clearFilters);
 });
+
+// Asegurarse de que las funciones estén disponibles globalmente
+window.clearFilters = clearFilters;

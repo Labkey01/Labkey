@@ -55,13 +55,10 @@ menuLinks.forEach((link) => {
         <!-- Buscador -->
         <div class="search-container">
             <input type="text" id="searchLab" placeholder="Laboratorio">
-            <input type="text" id="searchBuilding" placeholder="Edificio">
             <input type="date" id="searchDate" placeholder="Fecha">
             <input type="time" id="searchTime" placeholder="Hora">
-            <button class="btn" id="searchBtn" onclick="searchTable()">Buscar</button>
-            <button class="btn" id="clearFiltersBtn" onclick="clearFilters()">Limpiar Filtros</button>
+            <button class="btn" id="clearFiltersBtn" onclick="clearFilters()">Limpiar</button>
         </div>
-        
 
         <!-- Tabla de visualización de registros -->
         <div class="table-container">
@@ -72,7 +69,6 @@ menuLinks.forEach((link) => {
                         <th>Nombre</th>
                         <th>Matrícula</th>
                         <th>Laboratorio</th>
-                        <th>Edificio</th>
                         <th>No. Equipo</th>
                         <th>Fecha</th>
                         <th>Hora</th>
