@@ -6,25 +6,11 @@
     <title>Reporte de Incidencias de Laboratorios</title>
     <link rel="stylesheet" href="../css/reporte_incidencia.css">
     <link rel="icon" type="image/x-icon" href="../../img/labkey_Mesa de trabajo 1.png">
-    <link href='https://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css?family=Comfortaa" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    
 </head>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-// Obtener todos los enlaces del menú
-const menuLinks = document.querySelectorAll('.menu-nav ul li a');
-
-// Obtener la ruta actual de la URL
-const currentPath = window.location.pathname;
-
-// Comparar cada enlace con la ruta actual
-menuLinks.forEach((link) => {
-    if (link.getAttribute('href').includes(currentPath.split('/').pop())) {
-        link.classList.add('active'); // Agregar la clase active si coincide
-    }
-});
-});
-
-</script>
 <body>
     <header class="header">
         <div class="header-logo">
@@ -57,19 +43,13 @@ menuLinks.forEach((link) => {
             <div class="input-group">
                 <label for="laboratorio">Laboratorio</label>
                 <select id="laboratorio" class="input-text">
+                    <option value="">Seleccione el laboratorio</option>
                     <option value="K1">Laboratorio G1</option>
                     <option value="K2">Laboratorio G2</option>
-                    <option value="K2">Laboratorio G3</option>
+                    <option value="K3">Laboratorio G3</option>
                 </select>
             </div>
 
-            <div class="input-group">
-                <label for="edificio">Edificio</label>
-                <select id="edificio" class="input-text">
-                    <option value="Edificio K">Edificio G</option>
-                    <option value="Edificio L">Edificio K</option>
-                </select>
-            </div>
 
             <div class="input-group">
                 <label for="fechaInicio">Periodo de fechas</label>
@@ -81,19 +61,11 @@ menuLinks.forEach((link) => {
             <div class="input-group">
                 <label for="estado">Estado de la Incidencia</label>
                 <select id="estado" class="input-text">
-                    <option value="Pendiente">Pendiente</option>
+                    <option value="">Seleccione el estado</option>
+                    <option value="Sin resolver">Sin resolver</option>
                     <option value="Resuelta">Resuelta</option>
                 </select>
             </div>
-
-            <!-- <div class="input-group">
-                <label for="tipoIncidencia">Tipo de Incidencia</label>
-                <select id="tipoIncidencia" class="input-text">
-                    <option value="Hardware">Problemas de Hardware</option>
-                    <option value="Software">Problemas de Software</option>
-                    <option value="Infraestructura">Problemas de Infraestructura</option>
-                </select>
-            </div> -->
 
             <div class="buttons-container">
                 <button class="btn" id="limpiarBtn">Limpiar</button>
@@ -102,17 +74,16 @@ menuLinks.forEach((link) => {
         </div>
 
         <!-- Tabla del reporte (estructura visible desde el inicio) -->
-        <div class="table-container" id="reportTableContainer">
+        <div class="table-container" id="reportTableContainer" style="display: none;">
             <h3>Reporte de Incidencias</h3>
             <table class="table">
                 <thead>
                     <tr>
                         <th>Fecha</th>
                         <th>Laboratorio</th>
-                        <th>Edificio</th>
                         <th>Hora de Incidencia</th>
                         <th>Tipo de Incidencia</th>
-                        <th>Resulta por:</th>
+                        <th>Resuelto Por</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody">
@@ -131,6 +102,6 @@ menuLinks.forEach((link) => {
         </div>
     </main>
 
-    <script src="../js/reporte_incidencia.js"></script>
+    <script type="module" src="../js/reporte_incidencia.js"></script>
 </body>
 </html>
