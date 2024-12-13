@@ -12,6 +12,56 @@ body {
     justify-content: center;
     align-items: center;
 }
+        .hidden {
+            display: none;
+        }
+        .boton {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        .dropdown {
+            width: 100%;
+            max-width: 300px;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-family: 'Comfortaa';
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        table {
+            margin-top: 20px;
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .download-button, .clear-button, .generate-button {
+            padding: 10px 20px;
+            font-family: 'Comfortaa';
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .download-button {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .clear-button {
+            background-color: #d9534f;
+            color: white;
+        }
+        .generate-button {
+            background-color: #007BFF;
+            color: white;
+        }
 .menu-nav ul li a.active {
     color: #333; /* Color más oscuro */
     font-weight: bold; /* Negrita para resaltar */

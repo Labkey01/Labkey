@@ -214,6 +214,8 @@ label {
     cursor: pointer;
     font-size: 16px;
     margin-top: 20px;
+    display: block; /* Permite centrar el botón como bloque */
+    margin: 20px auto; /* Centra horizontalmente */
 }
 
 .download-button:hover {
@@ -233,7 +235,7 @@ label {
 }
 
 .generate-button {
-    background-color: #F04E23;
+    background-color: #14182a;
     color: white;
     padding: 10px 20px;
     border: none;
@@ -241,7 +243,10 @@ label {
     cursor: pointer;
     font-size: 16px;
     font-family: 'Comfortaa';
+    display: block; /* Permite centrar el botón como bloque */
+    margin: 20px auto; /* Centra horizontalmente */
 }
+
 
 .clear-button:hover {
     font-family: 'Comfortaa';
@@ -250,5 +255,5 @@ label {
 
 .generate-button:hover {
     font-family: 'Comfortaa';
-    background-color: #c43c1a;
+    background-color: #1E2741;
 }
