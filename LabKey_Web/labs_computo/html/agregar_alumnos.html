@@ -5,16 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agregar Alumnos</title>
-    <link rel="stylesheet" href="../css/agrgear_alumnos.css">
+    <link rel="stylesheet" href="../css/agregar_alumnos.css">
     <link rel="icon" type="image/x-icon" href="../../img/labkey_Mesa de trabajo 1.png">
-    <link href='https://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet'>
-   
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Comfortaa" rel="stylesheet">
 
-<!-- Tu configuración de Firebase -->
-<script src="../js/firebase-config.js"></script>
+    <!-- Firebase (Modo Módulo) -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js"></script>
+
+    <!-- Configuración de Firebase -->
+    <script type="module" src="../js/properties/firebaseConfig.js"></script>
 </head>
 
 <body>
@@ -31,23 +32,7 @@
             <img src="../../img/labkey_Mesa de trabajo 1.png" alt="LabKey Logo" class="logo">
         </div>
     </header>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-    // Obtener todos los enlaces del menú
-    const menuLinks = document.querySelectorAll('.menu-nav ul li a');
 
-    // Obtener la ruta actual de la URL
-    const currentPath = window.location.pathname;
-
-    // Comparar cada enlace con la ruta actual
-    menuLinks.forEach((link) => {
-        if (link.getAttribute('href').includes(currentPath.split('/').pop())) {
-            link.classList.add('active'); // Agregar la clase active si coincide
-        }
-    });
-});
-
-    </script>
     <!-- Menú de navegación -->
     <nav class="menu-nav">
         <ul>
@@ -55,41 +40,89 @@
             <li><a href="../html/gestion_usuarios.html">Usuarios</a></li>
             <li><a href="../html/lista_de_registros.html">Registro de uso</a></li>
             <li><a href="../html/registro_docentes.html">Registro de uso docentes</a></li>
-            <li><a href="../html/ gestion_incidencia.html">Incidencias</a></li>
+            <li><a href="../html/gestion_incidencia.html">Incidencias</a></li>
             <li><a href="../html/gestion_reportes.html">Reportes</a></li>
         </ul>
     </nav>
 
     <main class="main-container">
-        <!-- Formulario para cargar alumnos -->
+        <!-- Formulario para agregar un alumno individual -->
+         
         <div class="form-container">
+            <h3>Agregar un alumno individual</h3>
             <div class="input-group">
-                <label for="grupo">Grupo</label>
-                <select id="grupo" class="input-text">
-                    <option value="101">101</option>
-                    <option value="102">102</option>
-                    <option value="201">201</option>
-                    <!-- Agrega más grupos aquí -->
-                </select>
+                <label for="nombre">Nombre</label>
+                <input type="text" id="nombre" class="input-text">
             </div>
-
             <div class="input-group">
-                <label for="carrera">Carrera</label>
-                <select id="carrera" class="input-text">
-                    <option value="Ingeniería">Ingeniería</option>
-                    <option value="Ciencias Sociales">Ciencias Sociales</option>
-                    <option value="Administración">Administración</option>
-                    <!-- Agrega más carreras aquí -->
-                </select>
+                <label for="apellidoPaterno">Apellido Paterno</label>
+                <input type="text" id="apellidoPaterno" class="input-text">
+            </div>
+            <div class="input-group">
+                <label for="apellidoMaterno">Apellido Materno</label>
+                <input type="text" id="apellidoMaterno" class="input-text">
+            </div>            <!-- Nuevo campo CURP -->
+            <div class="input-group">
+                <label for="curp">CURP</label>
+                <input type="text" id="curp" class="input-text">
+            </div>
+            <div class="input-group">
+                <label for="matricula">Matrícula</label>
+                <input type="text" id="matricula" class="input-text">
+            </div>
+            <div class="input-group">
+                <label for="correo">Correo</label>
+                <input type="email" id="correo" class="input-text">
+            </div>
+            <div class="input-group">
+                <label for="grupoIndividual">Grupo</label>
+                <input type="text" id="grupoIndividual" class="input-text">
             </div>
 
-            <div class="input-group full-width">
-                <label for="archivo">Cargar archivo CSV</label>
-                <input type="file" id="archivo" accept=".csv, .xlsx" class="input-file">
-            </div>
-
-            <button class="upload-button" id="uploadBtn">Cargar archivo</button>
+            
+            <button class="upload-button" id="addIndividualBtn">Agregar Alumno</button>
         </div>
+
+
+
+
+
+        <!-- Formulario para cargar alumnos desde un archivo CSV -->
+<div class="form-container">
+    <h3>Cargar alumnos desde archivo CSV</h3>
+    <div class="input-group">
+        <label for="grupo">Grupo</label>
+        <input type="text" id="grupo" class="input-text">
+    </div>
+
+    <div class="input-group full-width">
+        <label for="archivo">Cargar archivo CSV</label>
+        <input type="file" id="archivo" accept=".csv" class="input-file">
+    </div>
+
+    <button class="upload-button" id="uploadBtn">Cargar archivo</button>
+    <button class="confirm-button" id="confirmBtn" disabled>Confirmar Carga</button>
+
+        <h3>Buscar por Carrera y Grupo</h3>
+        <div class="input-group">
+            <input type="text" id="searchGrupo" class="input-text" placeholder="Ej. IDyGS101">
+        </div>
+
+        <div class="button-container">
+            <button class="upload-button" id="searchBtn">Buscar</button>
+            <br><br>
+            <button class="upload-button" id="clearBtn">Limpiar</button>
+            <br><br>
+            <button class="upload-button" id="downloadBtn">Descargar Excel</button>
+    </div>
+</div>
+
+
+
+
+
+
+
 
         <!-- Vista previa de alumnos cargados -->
         <div class="table-container">
@@ -97,18 +130,17 @@
             <table class="table">
                 <thead>
                     <tr>
+                        <th>Matrícula</th>
                         <th>Nombre</th>
                         <th>Apellido Paterno</th>
                         <th>Apellido Materno</th>
-                        <th>Matrícula</th>
+                        <th>CURP</th>
                         <th>Correo</th>
                     </tr>
                 </thead>
-                <tbody id="tableBody">
-                    <!-- Aquí se llenarán los alumnos dinámicamente -->
-                </tbody>
+                <tbody id="tableBody"></tbody>
             </table>
-            <button class="confirm-button" id="confirmBtn" disabled>Confirmar Carga</button>
+
         </div>
     </main>
 
@@ -116,12 +148,13 @@
     <div id="modal" class="modal">
         <div class="modal-content">
             <span class="close-button">&times;</span>
-            <h2 id="modalMessage">Alumnos agregados correctamente</h2>
+            <h2 id="modalMessage">Operación completada con éxito</h2>
             <button class="modal-button" id="closeModalBtn">Aceptar</button>
         </div>
     </div>
 
-    <script src="../js/agrgear_alumnos.js"></script>
+    <!-- Script principal -->
+    <script type="module" src="../js/agregar_alumnos.js"></script>
 </body>
 
 </html>
