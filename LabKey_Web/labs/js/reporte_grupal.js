@@ -1,55 +1,119 @@
-document.getElementById("generateButton").onclick = function () {
+import { db } from "./firebase.js"; // Asegúrate de importar correctamente tu configuración de Firebase
+import { collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore.js";
+
+document.getElementById("generateButton").onclick = async function () {
+    const grupo = document.getElementById("grupo").value; // Obtener el grupo seleccionado
+    const fechaInicio = document.getElementById("fecha-inicio").value;
+    const fechaFin = document.getElementById("fecha-fin").value;
     const section = document.getElementById("report-table-section");
     const tbody = document.getElementById("report-table").querySelector("tbody");
 
-    // Datos de ejemplo
-    const students = [
-        { matricula: "12345", nombre: "Cristian Daniel Valeriano Hernández", fecha: "2024-12-01", hora: "08:00", asistencia: "Presente" },
-        { matricula: "12346", nombre: "José Alfredo Sorcia Cuellar", fecha: "2024-12-02", hora: "10:00", asistencia: "Ausente" },
-        { matricula: "12347", nombre: "Guadalupe Vargas Martínez", fecha: "2024-12-03", hora: "12:00", asistencia: "Presente" },
-    ];
+    // Validar campos
+    if (!fechaInicio || !fechaFin) {
+        alert("Por favor, selecciona un rango de fechas válido.");
+        return;
+    }
+    if (new Date(fechaInicio) > new Date(fechaFin)) {
+        alert("La fecha de inicio no puede ser posterior a la fecha de fin.");
+        return;
+    }
 
-    // Limpiar el tbody antes de añadir datos nuevos
-    tbody.innerHTML = "";
+    try {
+        // Construir la consulta para Firestore
+        const incidenciasQuery = query(
+            collection(db, "incidencias"),
+            where("grupo", "==", grupo) // Filtrar por grupo
+        );
 
-    // Crear filas en la tabla
-    students.forEach(student => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td>${student.matricula}</td>
-            <td>${student.nombre}</td>
-            <td>${student.fecha}</td>
-            <td>${student.hora}</td>
-            <td>${student.asistencia}</td>
-        `;
-        tbody.appendChild(row);
-    });
+        const querySnapshot = await getDocs(incidenciasQuery);
 
-    // Mostrar la tabla
-    section.classList.remove("hidden");
+        // Filtrar por rango de fechas en el cliente
+        const filteredIncidencias = querySnapshot.docs
+            .map((doc) => doc.data())
+            .filter((incidencia) => {
+                const incidenciaFecha = new Date(incidencia.fecha);
+                return incidenciaFecha >= new Date(fechaInicio) && incidenciaFecha <= new Date(fechaFin);
+            });
+
+        // Limpiar la tabla
+        tbody.innerHTML = "";
+
+        if (filteredIncidencias.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align: center;">No se encontraron datos para el criterio seleccionado.</td></tr>`;
+        } else {
+            // Agregar los datos filtrados a la tabla
+            filteredIncidencias.forEach((incidencia) => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${incidencia.matricula}</td>
+                    <td>${incidencia.nombre}</td>
+                    <td>${incidencia.fecha}</td>
+                    <td>${incidencia.hora}</td>
+                    <td>${incidencia.estado}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Mostrar la tabla
+        section.classList.remove("hidden");
+    } catch (error) {
+        console.error("Error al generar el reporte:", error);
+        alert("Ocurrió un error al generar el reporte. Por favor, inténtalo nuevamente.");
+    }
 };
 
-document.getElementById("downloadButton").onclick = function () {
-    const table = document.getElementById("report-table");
-    const rows = Array.from(table.rows);
+document.getElementById("downloadPDFButton").onclick = function () {
+    const grupo = document.getElementById("grupo").value;
+    const rows = document.querySelectorAll("#report-table tbody tr");
 
-    // Convertir tabla a formato CSV
-    let csvContent = "";
-    rows.forEach(row => {
-        const cells = Array.from(row.cells).map(cell => `"${cell.textContent}"`);
-        csvContent += cells.join(",") + "\n";
+    if (rows.length === 0) {
+        alert("No hay datos para descargar.");
+        return;
+    }
+
+    // Importar jsPDF y autoTable
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // Configuración inicial
+    const title = `Reporte de Incidencias - Grupo: ${grupo}`;
+    doc.setFontSize(18);
+    doc.text(title, 10, 10);
+
+    // Configurar datos de la tabla
+    const tableHeaders = ["Matrícula", "Nombre", "Fecha", "Hora", "Estado"];
+    const tableData = Array.from(rows).map(row => {
+        return Array.from(row.querySelectorAll("td")).map(td => td.textContent.trim());
     });
 
-    // Crear un archivo Blob con el contenido CSV
-    const blob = new Blob([csvContent], { type: "text/csv" });
-    const url = URL.createObjectURL(blob);
+    // Agregar tabla usando autoTable
+    doc.autoTable({
+        head: [tableHeaders],
+        body: tableData,
+        startY: 20, // La posición Y inicial de la tabla
+        theme: "striped", // Tema visual: "striped", "grid", o "plain"
+        headStyles: {
+            fillColor: [41, 128, 185], // Azul oscuro para los encabezados
+            textColor: 255, // Texto blanco
+            fontStyle: "bold",
+        },
+        bodyStyles: {
+            textColor: 50, // Texto negro
+        },
+        margin: { top: 20, left: 10, right: 10 }, // Márgenes del documento
+        styles: {
+            fontSize: 10, // Tamaño de fuente
+            cellPadding: 5, // Espaciado interno de las celdas
+        },
+        didDrawPage: function (data) {
+            // Agregar número de página en el pie de página
+            const pageNumber = doc.internal.getCurrentPageInfo().pageNumber;
+            doc.setFontSize(10);
+            doc.text(`Página ${pageNumber}`, data.settings.margin.left, doc.internal.pageSize.height - 10);
+        },
+    });
 
-    // Crear un enlace para descargar el archivo
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "reporte_grupal.csv";
-    a.click();
-
-    // Liberar el objeto URL
-    URL.revokeObjectURL(url);
+    // Guardar PDF con nombre personalizado
+    doc.save(`Reporte_Incidencias_${grupo}.pdf`);
 };

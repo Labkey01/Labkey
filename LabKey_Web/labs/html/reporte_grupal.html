@@ -7,11 +7,14 @@
     <link href='https://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet'>
     <link rel="icon" type="image/x-icon" href="../../img/labkey_Mesa de trabajo 1.png">
     <link rel="stylesheet" href="../css/reporte_grupal.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    
 </head>
 <body>
     <header class="header">
         <div class="header-logo">
-            <a href="#">
+            <a href="principal.html">
                 <img src="../../img/icons8-casa-manzana-100.png" alt="Home" class="icon-home">
             </a>
         </div>
@@ -32,16 +35,10 @@
 
     <main>
         <section class="report-section">
-            <label for="grupo">Carrera</label>
-            <select id="carrera" class="dropdown">
-                <option value="carrera1">Desarrollo y Gestión de Software</option>
-                <option value="carrera2">Tecnologias de la infromacion</option>
-                <option value="carrera2">Mecatronica</option>
-            </select>
             <label for="grupo">Grupo</label>
             <select id="grupo" class="dropdown">
-                <option value="grupo1">IDyGS101</option>
-                <option value="grupo2">IDyGS71</option>
+                <option value="IDYGS101">IDYGS101</option>
+                <option value="IDYGS71">IDYGS71</option>
             </select>
 
             <label for="fechas">Periodo de fechas</label>
@@ -71,10 +68,10 @@
                     <!-- Filas generadas dinámicamente -->
                 </tbody>
             </table>
-            <button class="download-button" id="downloadButton">Descargar Excel</button>
+            <button id="downloadPDFButton" class="download-button">Descargar PDF</button>
         </section>
     </main>
 
-    <script src="../js/reporte_grupal.js"></script>
+    <script type="module" src="../js/reporte_grupal.js"></script>
 </body>
 </html>
