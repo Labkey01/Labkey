@@ -1,174 +1,270 @@
-import { LKURI } from '../js/properties/properties.js';
-import { fetchAPI } from './properties/util.js';
+import { firebaseConfig } from "../js/properties/firebaseConfig.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+import { getFirestore, collection, getDocs, doc, updateDoc, query } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js";
+
+// Inicializar Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 let incidencias = [];
+let administradores = [];
 let itemsPerPage = 5;
 let currentPage = 1;
 let currentIncidencia = null;
 
-// Función para consumir el endpoint y cargar las incidencias
+// Cargar administradores
+async function fetchAdministradores() {
+    try {
+        const adminQuery = query(collection(db, "administradores"));
+        const adminSnapshot = await getDocs(adminQuery);
+        administradores = adminSnapshot.docs.map(doc => doc.data().nombre || "Encargado desconocido");
+    } catch (error) {
+        console.error("Error al cargar administradores:", error);
+        alert("Error al cargar administradores. Intenta de nuevo.");
+    }
+}
+
+// Cargar incidencias
 async function fetchIncidencias() {
     try {
-        const accessToken = sessionStorage.getItem("accessToken");
-        if (!accessToken) {
-            window.location.href = "./inicio_sesion.html"; // Redirigir si no hay sesión activa
-        }
-
-        // Llamada al API
-        incidencias = await fetchAPI(`${LKURI}/incidencias/list-all`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${accessToken}`,
-            },
-        });
-
-        // Renderizar la tabla con los datos obtenidos
-        currentPage = 1; // Reiniciar la paginación
+        const incQuery = query(collection(db, "incidencias"));
+        const incSnapshot = await getDocs(incQuery);
+        incidencias = incSnapshot.docs.map(doc => ({
+            id: doc.id,
+            nombre: doc.data().nombre || "Sin reportar",
+            laboratorio: doc.data().laboratorio || "Desconocido",
+            fecha: doc.data().fecha || "No especificada",
+            hora: doc.data().hora || "No especificada",
+            incidencia: doc.data().tipo_incidente || "No especificada",
+            estado: doc.data().estado || "Desconocido",
+            datosAdicionales: doc.data().datos_adicionales || "Sin información adicional",
+            resueltoPor: doc.data().resueltoPor || "N/A",
+            comentarios: doc.data().comentarios || "Sin comentarios"
+        }));
         renderTable();
     } catch (error) {
-        console.error("Error al cargar las incidencias:", error.message);
-        alert("Hubo un problema al cargar las incidencias. Intenta nuevamente más tarde.");
+        console.error("Error al cargar incidencias:", error);
+        alert("Error al cargar incidencias. Intenta de nuevo.");
     }
 }
 
-// Renderizar la tabla con las incidencias
-function renderTable() {
-    const tableBody = document.getElementById('tableBody');
-    tableBody.innerHTML = '';
+// Filtrar incidencias según Fecha, Hora y Laboratorio
+document.getElementById("searchBtn").addEventListener("click", () => {
+    const fecha = document.getElementById("fecha").value.trim();
+    const hora = document.getElementById("hora").value.trim();
+    const laboratorio = document.getElementById("laboratorio").value.trim().toLowerCase();
 
-    const start = (currentPage - 1) * itemsPerPage;
-    const end = start + itemsPerPage;
-    const paginatedIncidencias = incidencias.slice(start, end);
-
-    paginatedIncidencias.forEach((incidencia, index) => {
-        const row = `
-            <tr>
-                <td>${incidencia.alumno} <br> Matrícula: ${incidencia.matricula}</td>
-                <td>${incidencia.laboratorio}</td>
-                <td>${incidencia.fecha}</td>
-                <td>${incidencia.hora}</td>
-                <td>${incidencia.incidencia}</td>
-                <td>
-                    <button class="action-button" onclick="openResolveModal(${start + index})">Incidencia Resuelta</button>
-                </td>
-            </tr>
-        `;
-        tableBody.innerHTML += row;
-    });
-
-    document.getElementById('currentPage').textContent = currentPage;
-}
-
-// Función para abrir el modal de resolución
-window.openResolveModal = (index) => {
-    currentIncidencia = index;
-
-    document.getElementById('modalLaboratorio').value = incidencias[index].laboratorio;
-    document.getElementById('tipoIncidencia').value = incidencias[index].incidencia;
-
-    document.getElementById('resolveModal').style.display = 'flex';
-};
-
-// Confirmar resolución de incidencia
-document.getElementById('confirmResolveBtn').addEventListener('click', function () {
-    const resueltoPor = document.getElementById('resueltoPor').value;
-    const comentarios = document.getElementById('comentarios').value;
-
-    console.log("Incidencia resuelta por:", resueltoPor);
-    console.log("Comentarios:", comentarios);
-
-    // Remover la incidencia resuelta
-    incidencias.splice(currentIncidencia, 1);
-    renderTable();
-    document.getElementById('resolveModal').style.display = 'none';
-});
-
-// Cerrar modal de resolución
-document.getElementById('closeResolveModal').addEventListener('click', function () {
-    document.getElementById('resolveModal').style.display = 'none';
-});
-
-// Manejo de paginación
-document.getElementById('nextPage').addEventListener('click', function () {
-    if (currentPage * itemsPerPage < incidencias.length) {
-        currentPage++;
-        renderTable();
-    }
-});
-
-document.getElementById('prevPage').addEventListener('click', function () {
-    if (currentPage > 1) {
-        currentPage--;
-        renderTable();
-    }
-});
-
-// Inicializar
-document.addEventListener('DOMContentLoaded', () => {
-    fetchIncidencias(); // Cargar las incidencias al iniciar la página
-});
-
-
-// Función para filtrar incidencias dinámicamente
-function filterIncidencias() {
-    const fecha = document.getElementById('fecha').value;
-    const hora = document.getElementById('hora').value;
-    const laboratorio = document.getElementById('laboratorio').value.toLowerCase();
-
-    // Filtrar incidencias según los valores proporcionados
+    // Filtrar incidencias que coincidan con los criterios
     const filteredIncidencias = incidencias.filter((incidencia) => {
-        const matchesFecha = fecha ? incidencia.fecha === fecha : true; // Coincide exactamente con la fecha
-        const matchesHora = hora ? incidencia.hora.startsWith(hora) : true; // Coincide con el inicio de la hora
-        const matchesLaboratorio = laboratorio ? incidencia.laboratorio.toLowerCase().includes(laboratorio) : true;
+        const matchesFecha = fecha ? incidencia.fecha === fecha : true; // Filtrar por fecha exacta
+        const matchesHora = hora ? incidencia.hora.startsWith(hora) : true; // Filtrar por hora parcial
+        const matchesLaboratorio = laboratorio
+            ? incidencia.laboratorio.toLowerCase().includes(laboratorio)
+            : true; // Filtrar por texto parcial de laboratorio
 
         return matchesFecha && matchesHora && matchesLaboratorio;
     });
 
     // Renderizar la tabla con los resultados filtrados
     renderFilteredTable(filteredIncidencias);
-}
+});
 
-// Función para renderizar la tabla con los resultados filtrados
-function renderFilteredTable(filteredData) {
-    const tableBody = document.getElementById('tableBody');
-    tableBody.innerHTML = '';
+// Función para limpiar filtros y mostrar todas las incidencias
+document.getElementById("clearFiltersBtn").addEventListener("click", () => {
+    // Limpiar los campos de filtro
+    document.getElementById("fecha").value = "";
+    document.getElementById("hora").value = "";
+    document.getElementById("laboratorio").value = "";
 
-    if (filteredData.length === 0) {
-        tableBody.innerHTML = '<tr><td colspan="6">No se encontraron incidencias</td></tr>';
-        return;
-    }
+    // Renderizar la tabla completa con todas las incidencias
+    renderTable();
+});
 
-    filteredData.forEach((incidencia, index) => {
+
+// Renderizar tabla
+function renderTable() {
+    const tableBody = document.getElementById("tableBody");
+    tableBody.innerHTML = "";
+
+    const start = (currentPage - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    const paginatedIncidencias = incidencias.slice(start, end);
+
+    paginatedIncidencias.forEach((incidencia, index) => {
+        const actionButton = incidencia.estado === "Sin resolver"
+            ? `<button class="action-button red" onclick="openResolveModal(${start + index})">Resolver Incidencia</button>`
+            : `<button class="action-button green" onclick="openViewResolvedModal(${start + index})">Ver Incidencia</button>`;
+
         const row = `
             <tr>
-                <td>${incidencia.alumno} <br> Matrícula: ${incidencia.matricula}</td>
+                <td>${incidencia.nombre}</td>
                 <td>${incidencia.laboratorio}</td>
                 <td>${incidencia.fecha}</td>
                 <td>${incidencia.hora}</td>
                 <td>${incidencia.incidencia}</td>
-                <td>
-                    <button class="action-button" onclick="openResolveModal(${index})">Incidencia Resuelta</button>
-                </td>
+                <td>${incidencia.estado}</td>
+                <td>${actionButton}</td>
             </tr>
         `;
         tableBody.innerHTML += row;
     });
 
-    document.getElementById('currentPage').textContent = '1'; // Resetea la página mostrada
+    updatePaginationIndicator();
 }
 
-// Escucha de eventos para realizar la búsqueda automáticamente
-document.getElementById('fecha').addEventListener('input', filterIncidencias);
-document.getElementById('hora').addEventListener('input', filterIncidencias);
-document.getElementById('laboratorio').addEventListener('input', filterIncidencias);
+// Actualizar indicador de paginación
+function updatePaginationIndicator() {
+    const currentPageIndicator = document.getElementById("currentPage");
+    const totalPages = Math.ceil(incidencias.length / itemsPerPage);
+    currentPageIndicator.textContent = `${currentPage}/${totalPages}`;
+}
 
-// Inicializar
-document.addEventListener('DOMContentLoaded', () => {
-    fetchIncidencias(); // Cargar las incidencias al iniciar la página
 
-    // Renderizar la tabla inicial (sin filtros)
-    document.getElementById('fecha').value = ''; // Limpiar el filtro de fecha
-    document.getElementById('hora').value = ''; // Limpiar el filtro de hora
-    document.getElementById('laboratorio').value = ''; // Limpiar el filtro de laboratorio
+// Renderizar tabla filtrada
+function renderFilteredTable(filteredData) {
+    const tableBody = document.getElementById("tableBody");
+    tableBody.innerHTML = "";
+
+    if (filteredData.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="7">No se encontraron incidencias.</td></tr>';
+        return;
+    }
+
+    filteredData.forEach((incidencia, index) => {
+        const actionButton = incidencia.estado === "Sin resolver"
+            ? `<button class="action-button red" onclick="openResolveModal(${index})">Resolver Incidencia</button>`
+            : `<button class="action-button green" onclick="openViewResolvedModal(${index})">Ver Incidencia</button>`;
+
+        const row = `
+            <tr>
+                <td>${incidencia.nombre}</td>
+                <td>${incidencia.laboratorio}</td>
+                <td>${incidencia.fecha}</td>
+                <td>${incidencia.hora}</td>
+                <td>${incidencia.incidencia}</td>
+                <td>${incidencia.estado}</td>
+                <td>${actionButton}</td>
+            </tr>
+        `;
+        tableBody.innerHTML += row;
+    });
+}
+
+// Abrir modal para resolver incidencia
+window.openResolveModal = (index) => {
+    currentIncidencia = index;
+    const incidencia = incidencias[index];
+
+    document.getElementById("tipoIncidencia").value = incidencia.incidencia;
+    document.getElementById("modalLaboratorio").value = incidencia.laboratorio;
+
+    const resueltoPorSelect = document.getElementById("resueltoPor");
+    resueltoPorSelect.innerHTML = administradores.map(admin => `<option value="${admin}">${admin}</option>`).join("");
+
+    document.getElementById("resolveModal").style.display = "flex";
+};
+
+// Confirmar resolución
+document.getElementById("confirmResolveBtn").addEventListener("click", async () => {
+    try {
+        const resueltoPor = document.getElementById("resueltoPor").value;
+        const comentarios = document.getElementById("comentarios").value;
+
+        if (!resueltoPor || !comentarios) {
+            alert("Por favor completa todos los campos.");
+            return;
+        }
+
+
+        const incidencia = incidencias[currentIncidencia];
+        const docRef = doc(db, "incidencias", incidencia.id);
+
+        await updateDoc(docRef, {
+            estado: "Resuelta",
+            resueltoPor,
+            comentarios
+        });
+
+        incidencia.estado = "Resuelta";
+        incidencia.resueltoPor = resueltoPor;
+        incidencia.comentarios = comentarios;
+
+        renderTable();
+        document.getElementById("resolveModal").style.display = "none";
+
+        alert("La incidencia ha sido marcada como resuelta.");
+    } catch (error) {
+        console.error("Error al actualizar incidencia:", error);
+        alert("Error al marcar la incidencia como resuelta. Intenta de nuevo.");
+    }
+});
+
+// Abrir modal para ver incidencia resuelta
+window.openViewResolvedModal = (index) => {
+    const incidencia = incidencias[index];
+
+    document.getElementById("viewTipoIncidencia").value = incidencia.incidencia;
+    document.getElementById("viewLaboratorio").value = incidencia.laboratorio;
+    document.getElementById("viewEstado").value = incidencia.estado;
+    document.getElementById("viewResueltoPor").value = incidencia.resueltoPor || "N/A";
+    document.getElementById("viewComentarios").value = incidencia.comentarios || "Sin comentarios";
+    document.getElementById("viewDatosAdicionales").value = incidencia.datosAdicionales;
+
+    document.getElementById("viewResolvedModal").style.display = "flex";
+};
+
+// Cerrar modales
+document.getElementById("closeResolveModal").addEventListener("click", () => {
+    document.getElementById("resolveModal").style.display = "none";
+});
+
+document.getElementById("closeViewResolvedModal").addEventListener("click", () => {
+    document.getElementById("viewResolvedModal").style.display = "none";
+});
+
+// Inicializar y agregar eventos
+document.addEventListener("DOMContentLoaded", async () => {
+    await fetchAdministradores();
+    await fetchIncidencias();
+
+    const searchResolvedBtn = document.getElementById("searchResolvedBtn");
+    if (searchResolvedBtn) {
+        searchResolvedBtn.addEventListener("click", () => {
+            const incidenciasResueltas = incidencias.filter(incidencia => incidencia.estado === "Resuelta");
+            renderFilteredTable(incidenciasResueltas);
+        });
+    } else {
+        console.error("El botón 'Buscar incidencias resueltas' no existe en el DOM.");
+    }
+
+    const searchUnresolvedBtn = document.getElementById("searchUnresolvedBtn");
+    if (searchUnresolvedBtn) {
+        searchUnresolvedBtn.addEventListener("click", () => {
+            const incidenciasSinResolver = incidencias.filter(incidencia => incidencia.estado === "Sin resolver");
+            renderFilteredTable(incidenciasSinResolver);
+        });
+    } else {
+        console.error("El botón 'Buscar incidencias sin resolver' no existe en el DOM.");
+    }
+
+    const prevPageBtn = document.getElementById("prevPage");
+    const nextPageBtn = document.getElementById("nextPage");
+
+    if (prevPageBtn) {
+        prevPageBtn.addEventListener("click", () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderTable();
+            }
+        });
+    }
+
+    if (nextPageBtn) {
+        nextPageBtn.addEventListener("click", () => {
+            if (currentPage * itemsPerPage < incidencias.length) {
+                currentPage++;
+                renderTable();
+            }
+        });
+    }
 });

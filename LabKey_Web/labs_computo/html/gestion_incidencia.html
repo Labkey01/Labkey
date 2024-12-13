@@ -60,20 +60,25 @@
                 <label for="fecha">Fecha</label>
                 <input type="date" id="fecha" class="input-text">
             </div>
-        
             <div class="input-group">
                 <label for="hora">Hora</label>
                 <input type="time" id="hora" class="input-text">
             </div>
-        
             <div class="input-group">
                 <label for="laboratorio">Laboratorio</label>
                 <input type="text" id="laboratorio" class="input-text" placeholder="Buscar laboratorio...">
             </div>
-            <button class="clear-button" id="clearFiltersBtn">Limpiar</button>
+               <button id="searchBtn" class="search-button">Buscar</button>
+               <button id="clearFiltersBtn" class="clear-button">Limpiar</button>
+
+        </div>
+     
         </div>
         
-        <button class="search-button" id="searchBtn">Buscar incidencias resueltas </button>
+        <button id="searchResolvedBtn" class="search-button">Buscar incidencias resueltas</button>
+
+        <button id="searchUnresolvedBtn" class="search-button">Buscar incidencias sin resolver</button>
+
         <br>
         <br>
         
@@ -89,6 +94,7 @@
                         <th>Fecha</th>
                         <th>Hora</th>
                         <th>Incidencia</th>
+                        <th>Estado</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -104,6 +110,7 @@
         </div>
     </main>
 
+ 
     <!-- Modal para confirmar incidencia resuelta -->
     <div id="resolveModal" class="modal">
         <div class="modal-content">
@@ -122,11 +129,7 @@
     
             <div class="input-group">
                 <label for="resueltoPor">Resuelta por</label>
-                <select id="resueltoPor" class="input-text">
-                    <option value="Encargado 1">Encargado 1</option>
-                    <option value="Encargado 2">Encargado 2</option>
-                    <option value="Encargado 3">Encargado 3</option>
-                </select>
+                <select id="resueltoPor" class="input-text"></select>
             </div>
     
             <div class="input-group">
@@ -137,6 +140,49 @@
             <button class="modal-button" id="confirmResolveBtn">Confirmar</button>
         </div>
     </div>
+
+    <!-- Modal para ver incidencias resueltas -->
+    <div id="viewResolvedModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" id="closeViewResolvedModal">&times;</span>
+            <h2>Detalles de la incidencia</h2>
+            
+            <div class="input-group">
+                <label for="viewTipoIncidencia">Tipo de incidencia</label>
+                <input type="text" id="viewTipoIncidencia" class="input-text" readonly>
+            </div>
+
+            <div class="input-group">
+                <label for="viewDatosAdicionales">Detalles de la incidencia</label>
+                <textarea id="viewDatosAdicionales" class="input-text" readonly></textarea>
+            </div>
+
+            <div class="input-group">
+                <label for="viewLaboratorio">Laboratorio</label>
+                <input type="text" id="viewLaboratorio" class="input-text" readonly>
+            </div>
+
+            <div class="input-group">
+                <label for="viewEstado">Estado</label>
+                <input type="text" id="viewEstado" class="input-text" readonly>
+            </div>
+
+            <div class="input-group">
+                <label for="viewResueltoPor">Resuelta por</label>
+                <input type="text" id="viewResueltoPor" class="input-text" readonly>
+            </div>
+
+            <div class="input-group">
+                <label for="viewComentarios">Comentarios adicionales</label>
+                <textarea id="viewComentarios" class="input-text" readonly></textarea>
+            </div>
+        </div>
+    </div>
+
+
+    </div>
+</div>
+
     
     <script type="module" src="../js/ gestion_incidencia.js"></script>
 </body>
