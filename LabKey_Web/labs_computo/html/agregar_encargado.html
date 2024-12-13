@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Encargado</title>
+    <link rel="stylesheet" href="../css/agregar_encargado.css">
+    <link rel="icon" type="image/x-icon" href="../../img/labkey_Mesa de trabajo 1.png">
+    <link href='https://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet'>
+</head>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const menuLinks = document.querySelectorAll('.menu-nav ul li a');
+        const currentPath = window.location.pathname;
+        menuLinks.forEach((link) => {
+            if (link.getAttribute('href').includes(currentPath.split('/').pop())) {
+                link.classList.add('active');
+            }
+        });
+    });
+</script>
+<body>
+    <header class="header">
+        <div class="header-logo">
+            <a href="../html/principal.html">
+                <img src="../../img/icons8-casa-manzana-100.png" alt="Home" class="icon-home">
+            </a>
+        </div>
+        <div class="header-text">
+            <h2>Agregar Encargado</h2>
+        </div>
+        <div class="header-logo">
+            <img src="../../img/labkey_Mesa de trabajo 1.png" alt="LabKey Logo" class="logo">
+        </div>
+    </header>
+
+    <nav class="menu-nav">
+        <ul>
+            <li><a href="../html/gestion_labs1.html">Laboratorios</a></li>
+            <li><a href="../html/gestion_usuarios.html">Usuarios</a></li>
+            <li><a href="../html/lista_de_registros.html">Registro de uso</a></li>
+            <li><a href="../html/registro_docentes.html">Registro de uso docentes</a></li>
+            <li><a href="../html/gestion_incidencia.html">Incidencias</a></li>
+            <li><a href="../html/gestion_reportes.html">Reportes</a></li>
+        </ul>
+    </nav>
+
+    <main class="main-container">
+        <div class="form-container">
+            <div class="input-group">
+                <label for="nombre">Nombre completo</label>
+                <input type="text" id="nombre" class="input-text">
+            </div>
+            <div class="input-group">
+                <label for="area">Área</label>
+                <select id="area" class="input-text">
+                    <option value="Sistemas">Sistemas</option>
+                </select>
+            </div>
+            <div class="input-group full-width">
+                <label for="correo">Correo electrónico</label>
+                <input type="email" id="correo" class="input-text">
+            </div>
+            <div class="input-group full-width">
+                <label for="contraseña">Contraseña</label>
+                <input type="password" id="contraseña" class="input-text">
+            </div>
+            <div class="agregar1">
+                <button class="add-button" id="addBtn">Agregar</button>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <h3>Encargados registrados</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Área</th>
+                        <th>Correo</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+            <div class="pagination">
+                <button id="prevPage">Anterior</button>
+                <span id="currentPage"></span>
+                <button id="nextPage">Siguiente</button>
+            </div>
+        </div>
+    </main>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2 id="modalMessage">Encargado agregado correctamente</h2>
+            <button class="modal-button" id="closeModalBtn">Aceptar</button>
+        </div>
+    </div>
+
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Editar Encargado</h2>
+            <div class="input-group">
+                <label for="editNombre">Nombre completo</label>
+                <input type="text" id="editNombre" class="input-text">
+            </div>
+            <div class="input-group">
+                <label for="editArea">Área</label>
+                <select id="editArea" class="input-text">
+                    <option value="Sistemas">Sistemas</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="editCorreo">Correo electrónico</label>
+                <input type="email" id="editCorreo" class="input-text">
+            </div>
+            <div class="input-group">
+                <label for="editContraseña">Contraseña</label>
+                <input type="password" id="editContraseña" class="input-text">
+            </div>
+            <button class="modal-button" id="saveEditBtn">Guardar</button>
+        </div>
+    </div>
+
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>¿Deseas eliminar a este encargado?</h2>
+            <button class="modal-button" id="confirmDeleteBtn">Eliminar</button>
+            <button class="modal-button" id="cancelDeleteBtn">Cancelar</button>
+        </div>
+    </div>
+
+    <script type="module" src="../js/agregar_encargado.js"></script>
+</body>
+</html>

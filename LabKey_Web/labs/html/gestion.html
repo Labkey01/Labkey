@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Laboratorio</title>
+    <link rel="stylesheet" href="../css/gestion.css">
+    <link rel="icon" type="image/x-icon" href="../../img/labkey_Mesa de trabajo 1.png">
+    <link href='https://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet'>
+</head>
+<body>
+    <header class="header">
+        <div class="header-logo">
+            <a href="../html/principal.html" >
+                <img src="../../img/icons8-casa-manzana-100.png" alt="Home" class="icon-home">
+            </a>
+        </div>
+        <div class="header-text">
+            <h2>Gestión de Laboratorio</h2>
+        </div>
+        <div class="header-logo">
+            <img src="../../img/labkey_Mesa de trabajo 1.png" alt="LabKey Logo" class="logo">
+        </div>
+    </header>
+    <nav class="menu-nav">
+        <ul>
+            <li><a href="../html/lista_alumnos.html">Lista de alumnos</a></li>
+            <li><a href="../html/gestion.html">Gestión de lugares</a></li>
+            <li><a href="../html/reportes.html">Reportes</a></li>
+        </ul>
+    </nav>
+
+    <div class="status-container">
+        <span>Disponible</span> <span class="color-box available"></span>
+        <span>Descompuesto</span> <span class="color-box disabled"></span>
+    </div>
+
+    <main class="main-content">
+        <div class="card">
+            <h3>Seleccione equipos disponibles</h3>
+            <div class="grid-container">
+                <div class="grid" id="grid">
+                    <!-- Botones generados dinámicamente -->
+                </div>
+                <button class="accept-button" id="acceptBtn" disabled>Aceptar</button>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button class="action-button enable" id="enableBtn">Habilitar equipos</button>
+            <button class="action-button disable" id="disableBtn">Inhabilitar equipos</button>
+            <button class="action-button add" id="addBtn">Agregar más lugares</button>
+        </div>
+
+        <div id="message" class="message"></div>
+
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <p id="modalMessage"></p>
+                <button onclick="closeModal()">Cerrar</button>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/gestion.js"></script>
+</body>
+</html>

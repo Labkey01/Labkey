@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Reportes</title>
+    <link rel="stylesheet" href="../css/gestion_reportes.css">
+    <link rel="icon" type="image/x-icon" href="../../img/labkey_Mesa de trabajo 1.png">
+    <link href='https://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet'>
+</head>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+// Obtener todos los enlaces del menú
+const menuLinks = document.querySelectorAll('.menu-nav ul li a');
+
+// Obtener la ruta actual de la URL
+const currentPath = window.location.pathname;
+
+// Comparar cada enlace con la ruta actual
+menuLinks.forEach((link) => {
+    if (link.getAttribute('href').includes(currentPath.split('/').pop())) {
+        link.classList.add('active'); // Agregar la clase active si coincide
+    }
+});
+});
+
+</script>
+<body>
+    <header class="header">
+        <div class="header-logo">
+            <a href="../html/principal.html">
+                <img src="../../img/icons8-casa-manzana-100.png" alt="Home" class="icon-home">
+            </a>
+        </div>
+        <div class="header-text">
+            <h2>Gestión de Reportes</h2>
+        </div>
+        <div class="header-logo">
+            <img src="../../img/labkey_Mesa de trabajo 1.png" alt="LabKey Logo" class="logo">
+        </div>
+    </header>
+    <!-- Menú de navegación -->
+    <nav class="menu-nav">
+        <ul>
+            <li><a href="../html/gestion_labs1.html">Laboratorios</a></li>
+            <li><a href="../html/gestion_usuarios.html">Usuarios</a></li>
+            <li><a href="../html/lista_de_registros.html">Registro de uso alumnos</a></li>
+            <li><a href="../html/registro_docentes.html">Registro de uso docentes</a></li>
+            <li><a href="../html/gestion_incidencia.html">Incidencias</a></li>
+            <li><a href="../html/gestion_reportes.html">Reportes</a></li>
+        </ul>
+    </nav>
+
+    <main class="main-container">
+        <!-- Opciones de reportes -->
+        <div class="report-container">
+            <button class="report-button" id="incidenciasReport" onclick="window.location.href='../html/reporte_incidencia.html'">Reporte de Incidencias</button>
+            <button class="report-button" id="labUsageReport" onclick="window.location.href='../html/reporte_uso_labs.html'">Reporte de Uso de Laboratorio</button>
+        </div>
+
+        <!-- Área para mostrar el contenido del reporte -->
+        <div id="reportContent" class="report-content">
+            <!-- Aquí se cargará el contenido de los reportes seleccionados -->
+        </div>
+    </main>
+
+    <script src="../js/gestion_reportes.js"></script>
+</body>
+</html>
