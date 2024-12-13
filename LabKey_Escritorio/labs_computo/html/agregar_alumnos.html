@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Alumnos</title>
+    <link rel="stylesheet" href="../css/agregar_alumnos.css">
+    <link rel="icon" type="image/x-icon" href="../../img/labkey_Mesa de trabajo 1.png">
+    <link href="https://fonts.googleapis.com/css?family=Comfortaa" rel="stylesheet">
+
+    <!-- Firebase (Modo Módulo) -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js"></script>
+
+    <!-- Configuración de Firebase -->
+    <script type="module" src="../js/properties/firebaseConfig.js"></script>
+</head>
+
+<body>
+    <header class="header">
+        <div class="header-logo">
+            <a href="../html/principal.html">
+                <img src="../../img/icons8-casa-manzana-100.png" alt="Home" class="icon-home">
+            </a>
+        </div>
+        <div class="header-text">
+            <h2>Agregar Alumnos</h2>
+        </div>
+        <div class="header-logo">
+            <img src="../../img/labkey_Mesa de trabajo 1.png" alt="LabKey Logo" class="logo">
+        </div>
+    </header>
+
+    <!-- Menú de navegación -->
+    <nav class="menu-nav">
+        <ul>
+            <li><a href="../html/gestion_labs1.html">Laboratorios</a></li>
+            <li><a href="../html/gestion_usuarios.html">Usuarios</a></li>
+            <li><a href="../html/lista_de_registros.html">Registro de uso</a></li>
+            <li><a href="../html/registro_docentes.html">Registro de uso docentes</a></li>
+            <li><a href="../html/gestion_incidencia.html">Incidencias</a></li>
+            <li><a href="../html/gestion_reportes.html">Reportes</a></li>
+        </ul>
+    </nav>
+
+    <main class="main-container">
+        <!-- Formulario para agregar un alumno individual -->
+        <div class="form-container">
+            <h3>Agregar un alumno individual</h3>
+            <div class="input-group">
+                <label for="nombre">Nombre</label>
+                <input type="text" id="nombre" class="input-text">
+            </div>
+            <div class="input-group">
+                <label for="apellidoPaterno">Apellido Paterno</label>
+                <input type="text" id="apellidoPaterno" class="input-text">
+            </div>
+            <div class="input-group">
+                <label for="apellidoMaterno">Apellido Materno</label>
+                <input type="text" id="apellidoMaterno" class="input-text">
+            </div>            <!-- Nuevo campo CURP -->
+            <div class="input-group">
+                <label for="curp">CURP</label>
+                <input type="text" id="curp" class="input-text">
+            </div>
+            <div class="input-group">
+                <label for="matricula">Matrícula</label>
+                <input type="text" id="matricula" class="input-text">
+            </div>
+            <div class="input-group">
+                <label for="correo">Correo</label>
+                <input type="email" id="correo" class="input-text">
+            </div>
+            <div class="input-group">
+                <label for="grupoIndividual">Grupo</label>
+                <input type="text" id="grupoIndividual" class="input-text">
+            </div>
+
+            
+            <button class="upload-button" id="addIndividualBtn">Agregar Alumno</button>
+        </div>
+
+        <!-- Formulario para cargar alumnos desde un archivo CSV -->
+        <div class="form-container">
+            <h3>Cargar alumnos desde archivo CSV</h3>
+            <div class="input-group">
+                <label for="grupo">Grupo</label>
+                <input type="text" id="grupo" class="input-text">
+            </div>
+
+            <div class="input-group full-width">
+                <label for="archivo">Cargar archivo CSV</label>
+                <input type="file" id="archivo" accept=".csv" class="input-file">
+            </div>
+
+            <button class="upload-button" id="uploadBtn">Cargar archivo</button>
+        </div>
+
+        <!-- Vista previa de alumnos cargados -->
+        <div class="table-container">
+            <h3>Alumnos cargados</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Matrícula</th>
+                        <th>Nombre</th>
+                        <th>Apellido Paterno</th>
+                        <th>Apellido Materno</th>
+                        <th>CURP</th>
+                        <th>Correo</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+            <button class="confirm-button" id="confirmBtn" disabled>Confirmar Carga</button>
+        </div>
+    </main>
+
+    <!-- Modal de confirmación -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2 id="modalMessage">Operación completada con éxito</h2>
+            <button class="modal-button" id="closeModalBtn">Aceptar</button>
+        </div>
+    </div>
+
+    <!-- Script principal -->
+    <script type="module" src="../js/agregar_alumnos.js"></script>
+</body>
+
+</html>

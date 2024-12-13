@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uso de Laboratorios</title>
+    <link rel="stylesheet" href="../css/gestion_de_uso.css">
+    <link rel="icon" type="image/x-icon" href="../../img/labkey_Mesa de trabajo 1.png">
+    <link href='https://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet'>
+</head>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+// Obtener todos los enlaces del menú
+const menuLinks = document.querySelectorAll('.menu-nav ul li a');
+
+// Obtener la ruta actual de la URL
+const currentPath = window.location.pathname;
+
+// Comparar cada enlace con la ruta actual
+menuLinks.forEach((link) => {
+    if (link.getAttribute('href').includes(currentPath.split('/').pop())) {
+        link.classList.add('active'); // Agregar la clase active si coincide
+    }
+});
+});
+
+</script>
+<body>
+    <header class="header">
+        <div class="header-logo">
+            <a href="../html/principal.html">
+                <img src="../../img/icons8-casa-manzana-100.png" alt="Home" class="icon-home">
+            </a>
+        </div>
+        <div class="header-text">
+            <h2>Registro de Uso de Laboratorios</h2>
+        </div>
+        <div class="header-logo">
+            <img src="../../img/labkey_Mesa de trabajo 1.png" alt="LabKey Logo" class="logo">
+        </div>
+    </header>
+    <!-- Menú de navegación -->
+    <nav class="menu-nav">
+        <ul>
+            <li><a href="../html/gestion_labs1.html">Laboratorios</a></li>
+            <li><a href="../html/gestion_usuarios.html">Usuarios</a></li>
+            <li><a href="../html/lista_de_registros.html">Registro de uso</a></li>
+            <li><a href="../html/registro_docentes.html">Registro de uso docentes</a></li>
+            <li><a href="../html/gestion_incidencia.html">Incidencias</a></li>
+            <li><a href="../html/gestion_reportes.html">Reportes</a></li>
+        </ul>
+    </nav>
+
+    <main class="main-container">
+        <!-- Buscador -->
+        <div class="search-container">
+            <input type="date" id="searchDate" placeholder="Fecha">
+            <input type="time" id="searchTime" placeholder="Hora">
+            <input type="text" id="searchGroup" placeholder="Grupo">
+            <input type="text" id="searchCareer" placeholder="Carrera">
+            <input type="text" id="searchLab" placeholder="Laboratorio">
+            <button class="btn" id="searchBtn" onclick="searchTable()">Buscar</button>
+        </div>
+
+        <!-- Tabla de visualización de uso de laboratorios -->
+        <div class="table-container">
+            <h3>Registros de Uso de Laboratorios</h3>
+            <table id="usageTable">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Matrícula</th>
+                        <th>Grupo</th>
+                        <th>Carrera</th>
+                        <th>Edificio</th>
+                        <th>Laboratorio</th>
+                        <th>No. Equipo</th>
+                        <th>Hora</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody id="usageTableBody">
+                    <!-- Los datos se cargarán dinámicamente -->
+                </tbody>
+            </table>
+
+            <!-- Paginación -->
+            <div class="pagination">
+                <button id="prevPage" onclick="prevPage()">Anterior</button>
+                <span id="pageNumber">1</span>
+                <button id="nextPage" onclick="nextPage()">Siguiente</button>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/gestion_de_uso.js"></script>
+</body>
+</html>
