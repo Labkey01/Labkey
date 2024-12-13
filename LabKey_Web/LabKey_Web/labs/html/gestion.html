@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Lugares por Horario</title>
+    <link rel="stylesheet" href="../css/gestion.css">
+    <link href='https://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet'>
+
+</head>
+<body>
+    <header class="header">
+        <div class="header-logo">
+            <a href="../html/principal.html" >
+                <img src="../../img/icons8-casa-manzana-100.png" alt="Home" class="icon-home">
+            </a>
+        </div>
+        <div class="header-text">
+            <h2>Gestion de lugares</h2>
+        </div>
+        <div class="header-logo">
+            <img src="../../img/labkey_Mesa de trabajo 1.png" alt="LabKey Logo" class="logo">
+        </div>
+    </header>
+    <nav class="menu-nav">
+        <ul>
+            <li><a href="../html/lista_alumnos.html">Lista de alumnos</a></li>
+            <li><a href="../html/gestion.html">Gestión de lugares</a></li>
+            <li><a href="../html/reportes.html">Reportes</a></li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+        <section class="horario-selector">
+            <label for="horarioSelect" class="horario-label">Seleccione un Horario:</label>
+            <select id="horarioSelect" class="horario-dropdown">
+                <!-- Los horarios se cargarán dinámicamente aquí -->
+            </select>
+        </section>
+        <section id="gridContainer" class="grid-container">
+            <div id="grid" class="grid"></div>
+        </section>
+        <section class="controls">
+            <section class="controls">
+                <button id="enableBtn" class="control-button">Habilitar Lugares</button>
+                <button id="disableBtn" class="control-button">Inhabilitar Lugares</button>
+                <button id="blockAllBtn" class="control-button">Bloquear Todos</button> <!-- Nuevo botón -->
+                <button id="unblockAllBtn" class="control-button">Desbloquear Todos</button> <!-- Nuevo botón -->
+                <button id="acceptBtn" class="control-button accept-button" disabled>Aceptar Cambios</button>
+            </section>
+            
+        </section>
+        <div id="message" class="message"></div>
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <p id="modalMessage"></p>
+                <button class="modal-close-button">Cerrar</button>
+            </div>
+        </div>
+    </main>
+    <script src="../js/gestion.js" type="module"></script>
+</body>
+</html>

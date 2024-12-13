@@ -1,0 +1,245 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Comfortaa';
+    background-color: #f5f5f5;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.menu-nav ul li a.active {
+    color: #333; /* Color más oscuro */
+    font-weight: bold; /* Negrita para resaltar */
+}
+
+.menu-nav ul li a.active::after {
+    width: 100%; /* La barra inferior debe estar activa */
+}
+
+/* Estilos del menú de navegación */
+.menu-nav {
+    background-color: #fff;
+    padding: 15px 0;
+    border-bottom: 1px solid #dcdcdc;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05);
+    
+}
+
+.menu-nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+
+.menu-nav ul li {
+    position: relative;
+}
+
+.menu-nav ul li a {
+    font-size: 18px;
+    color: #555;
+    text-decoration: none;
+    padding: 10px 20px;
+    position: relative;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.menu-nav ul li a:hover {
+    color: #333;
+}
+
+.menu-nav ul li a::after {
+    content: '';
+    width: 0;
+    height: 2px;
+    background-color: #333;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    transition: width 0.3s ease;
+}
+
+.menu-nav ul li a:hover::after {
+    width: 100%;
+}
+
+.header-logo img {
+    width: 80px;
+}
+
+.header-text h2 {
+    font-size: 24px;
+    color: #1E2741;
+}
+
+.header {
+    background-color: #e0e0e0;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+   
+}
+
+.header-logo img {
+    width: 80px;
+}
+
+/* .header-logo img {
+    width: 70px;
+} */
+
+.header-text h2 {
+    color: #1E2741;
+    font-size: 24px;
+}
+
+main {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 600px;
+    margin-top: 5%;
+}
+
+.report-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+label {
+    font-size: 18px;
+    color: #1E2741;
+}
+
+.dropdown, .date-input {
+    font-family: 'Comfortaa';
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 100%;
+    max-width: 300px;
+}
+
+.date-range {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.generate-button {
+    font-family: 'Comfortaa';
+    padding: 15px;
+    background-color: #1E2741;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    width: 100%;
+    max-width: 300px;
+    margin-top: 20px;
+}
+
+.boton{
+    display: flex;
+    justify-content: center;
+}
+
+
+
+/* Estilos del modal */
+.modal {
+    display: none; /* Oculto por defecto */
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro semitransparente */
+}
+
+.modal-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-color: #e0e0e0;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 20px;
+    width: 80%;
+    max-width: 600px;
+    min-height: 300px;
+    text-align: center;
+    position: relative;
+}
+
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    color: #1E2741;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.download-button {
+    background-color: #4f8ac9;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+.download-button:hover {
+    background-color: #3b6b9a;
+}
+
+.clear-button {
+    background-color: #1E2741;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+.generate-button {
+    background-color: #F04E23;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-family: 'Comfortaa';
+}
+
+.clear-button:hover {
+    background-color: #14182a;
+    font-family: 'Comfortaa';
+}
+
+.generate-button:hover {
+    background-color: #c43c1a;
+    font-family: 'Comfortaa';
+}

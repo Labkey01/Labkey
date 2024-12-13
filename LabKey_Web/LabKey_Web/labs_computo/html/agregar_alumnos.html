@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Alumnos</title>
+    <link rel="stylesheet" href="../css/agrgear_alumnos.css">
+    <link rel="icon" type="image/x-icon" href="../../img/labkey_Mesa de trabajo 1.png">
+    <link href='https://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet'>
+   
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
+
+<!-- Tu configuración de Firebase -->
+<script src="../js/firebase-config.js"></script>
+</head>
+
+<body>
+    <header class="header">
+        <div class="header-logo">
+            <a href="../html/principal.html">
+                <img src="../../img/icons8-casa-manzana-100.png" alt="Home" class="icon-home">
+            </a>
+        </div>
+        <div class="header-text">
+            <h2>Agregar Alumnos</h2>
+        </div>
+        <div class="header-logo">
+            <img src="../../img/labkey_Mesa de trabajo 1.png" alt="LabKey Logo" class="logo">
+        </div>
+    </header>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+    // Obtener todos los enlaces del menú
+    const menuLinks = document.querySelectorAll('.menu-nav ul li a');
+
+    // Obtener la ruta actual de la URL
+    const currentPath = window.location.pathname;
+
+    // Comparar cada enlace con la ruta actual
+    menuLinks.forEach((link) => {
+        if (link.getAttribute('href').includes(currentPath.split('/').pop())) {
+            link.classList.add('active'); // Agregar la clase active si coincide
+        }
+    });
+});
+
+    </script>
+    <!-- Menú de navegación -->
+    <nav class="menu-nav">
+        <ul>
+            <li><a href="../html/gestion_labs1.html">Laboratorios</a></li>
+            <li><a href="../html/gestion_usuarios.html">Usuarios</a></li>
+            <li><a href="../html/lista_de_registros.html">Registro de uso</a></li>
+            <li><a href="../html/registro_docentes.html">Registro de uso docentes</a></li>
+            <li><a href="../html/ gestion_incidencia.html">Incidencias</a></li>
+            <li><a href="../html/gestion_reportes.html">Reportes</a></li>
+        </ul>
+    </nav>
+
+    <main class="main-container">
+        <!-- Formulario para cargar alumnos -->
+        <div class="form-container">
+            <div class="input-group">
+                <label for="grupo">Grupo</label>
+                <select id="grupo" class="input-text">
+                    <option value="101">101</option>
+                    <option value="102">102</option>
+                    <option value="201">201</option>
+                    <!-- Agrega más grupos aquí -->
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="carrera">Carrera</label>
+                <select id="carrera" class="input-text">
+                    <option value="Ingeniería">Ingeniería</option>
+                    <option value="Ciencias Sociales">Ciencias Sociales</option>
+                    <option value="Administración">Administración</option>
+                    <!-- Agrega más carreras aquí -->
+                </select>
+            </div>
+
+            <div class="input-group full-width">
+                <label for="archivo">Cargar archivo CSV</label>
+                <input type="file" id="archivo" accept=".csv, .xlsx" class="input-file">
+            </div>
+
+            <button class="upload-button" id="uploadBtn">Cargar archivo</button>
+        </div>
+
+        <!-- Vista previa de alumnos cargados -->
+        <div class="table-container">
+            <h3>Alumnos cargados</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Apellido Paterno</th>
+                        <th>Apellido Materno</th>
+                        <th>Matrícula</th>
+                        <th>Correo</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Aquí se llenarán los alumnos dinámicamente -->
+                </tbody>
+            </table>
+            <button class="confirm-button" id="confirmBtn" disabled>Confirmar Carga</button>
+        </div>
+    </main>
+
+    <!-- Modal de confirmación -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2 id="modalMessage">Alumnos agregados correctamente</h2>
+            <button class="modal-button" id="closeModalBtn">Aceptar</button>
+        </div>
+    </div>
+
+    <script src="../js/agrgear_alumnos.js"></script>
+</body>
+
+</html>

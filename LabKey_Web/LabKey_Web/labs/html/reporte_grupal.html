@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportes Grupales</title>
+    <link href='https://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet'>
+    <link rel="icon" type="image/x-icon" href="../../img/labkey_Mesa de trabajo 1.png">
+    <link rel="stylesheet" href="../css/reporte_grupal.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-logo">
+            <a href="#">
+                <img src="../../img/icons8-casa-manzana-100.png" alt="Home" class="icon-home">
+            </a>
+        </div>
+        <div class="header-text">
+            <h1>Reportes Grupales</h1>
+        </div>
+        <div class="header-logo">
+            <img src="../../img/labkey_Mesa de trabajo 1.png" alt="LabKey Logo" class="logo">
+        </div>
+    </header>
+    <nav class="menu-nav">
+        <ul>
+            <li><a href="../html/lista_alumnos.html">Lista de alumnos</a></li>
+            <li><a href="../html/gestion.html">Gestión de lugares</a></li>
+            <li><a href="../html/reportes.html">Reportes</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section class="report-section">
+            <label for="grupo">Carrera</label>
+            <select id="carrera" class="dropdown">
+                <option value="carrera1">Desarrollo y Gestión de Software</option>
+                <option value="carrera2">Tecnologias de la infromacion</option>
+                <option value="carrera2">Mecatronica</option>
+            </select>
+            <label for="grupo">Grupo</label>
+            <select id="grupo" class="dropdown">
+                <option value="grupo1">IDyGS101</option>
+                <option value="grupo2">IDyGS71</option>
+            </select>
+
+            <label for="fechas">Periodo de fechas</label>
+            <div class="date-range">
+                <input type="date" id="fecha-inicio" class="date-input">
+                <span>—</span>
+                <input type="date" id="fecha-fin" class="date-input">
+            </div>
+
+            <div class="boton">
+                <button class="generate-button" id="generateButton">Generar</button>
+            </div>
+        </section>
+
+        <section id="report-table-section" class="hidden">
+            <table id="report-table">
+                <thead>
+                    <tr>
+                        <th>Matrícula</th>
+                        <th>Nombre del Alumno</th>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>Asistencia</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Filas generadas dinámicamente -->
+                </tbody>
+            </table>
+            <button class="download-button" id="downloadButton">Descargar Excel</button>
+        </section>
+    </main>
+
+    <script src="../js/reporte_grupal.js"></script>
+</body>
+</html>

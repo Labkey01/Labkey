@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratorios</title>
+    <link rel="stylesheet" href="../css/gestion_labs1.css">
+    <link rel="icon" type="image/x-icon" href="../../img/labkey_Mesa de trabajo 1.png">
+    <link href='https://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet'>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+
+
+</head>
+<body>
+    <header class="header">
+        <div class="header-logo">
+            <a href="../html/principal.html">
+                <img src="../../img/icons8-casa-manzana-100.png" alt="Home" class="icon-home">
+            </a>
+        </div>
+        <div class="header-text">
+            <h2>Laboratorios</h2>
+        </div>
+        <div class="header-logo">
+            <img src="../../img/labkey_Mesa de trabajo 1.png" alt="LabKey Logo" class="logo">
+        </div>
+    </header>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+    // Obtener todos los enlaces del menú
+    const menuLinks = document.querySelectorAll('.menu-nav ul li a');
+
+    // Obtener la ruta actual de la URL
+    const currentPath = window.location.pathname;
+
+    // Comparar cada enlace con la ruta actual
+    menuLinks.forEach((link) => {
+        if (link.getAttribute('href').includes(currentPath.split('/').pop())) {
+            link.classList.add('active'); // Agregar la clase active si coincide
+        }
+    });
+});
+
+    </script>
+    <!-- Menú de navegación -->
+    <nav class="menu-nav">
+        <ul>
+            <li><a href="../html/gestion_labs1.html">Laboratorios</a></li>
+            <li><a href="../html/gestion_usuarios.html">Usuarios</a></li>
+            <li><a href="../html/lista_de_registros.html">Registro de uso alumnos</a></li>
+            <li><a href="../html/registro_docentes.html">Registro de uso docentes</a></li>
+            <li><a href="../html/gestion_incidencia.html">Incidencias</a></li>
+            <li><a href="../html/gestion_reportes.html">Reportes</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section class="action-section">
+            <button class="register-button" onclick="window.location.href='../html/nuevo_lab2.html'">Registra un laboratorio</button>
+            <input type="text" id="searchBar" class="search-bar" placeholder="Buscar laboratorio...">
+        </section>
+
+        <section class="lab-list" id="labList">
+            <!-- Los laboratorios se inyectarán dinámicamente -->
+        </section>
+
+        <section class="pagination-section">
+            <button class="pagination-button" id="prevPage">Anterior</button>
+            <span id="currentPage">1</span>
+            <button class="pagination-button" id="nextPage">Siguiente</button>
+        </section>
+    </main>
+
+    <!-- Modal de confirmación -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2 id="modalTitle">Eliminar laboratorio</h2>
+            <p id="modalMessage">¿Deseas eliminar el laboratorio <span id="labName"></span>?</p>
+            <button class="modal-button" id="confirmDelete">Eliminar</button>
+            <button class="modal-button cancel-button" id="cancelDelete">Cancelar</button>
+        </div>
+    </div>
+
+    <script type="module" src="../js/gestion_labs1.js"></script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Profesores</title>
+    <link rel="stylesheet" href="../css/regitro_docentes.css">
+    <link rel="icon" type="image/x-icon" href="../../img/labkey_Mesa de trabajo 1.png">
+    <link href='https://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet'>
+</head>
+<body>
+    <header class="header">
+        <div class="header-logo">
+            <a href="../html/principal.html">
+                <img src="../../img/icons8-casa-manzana-100.png" alt="Home" class="icon-home">
+            </a>
+        </div>
+        <div class="header-text">
+            <h2>Registro de Profesores</h2>
+        </div>
+        <div class="header-logo">
+            <img src="../../img/labkey_Mesa de trabajo 1.png" alt="LabKey Logo" class="logo">
+        </div>
+    </header>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+    // Obtener todos los enlaces del menú
+    const menuLinks = document.querySelectorAll('.menu-nav ul li a');
+
+    // Obtener la ruta actual de la URL
+    const currentPath = window.location.pathname;
+
+    // Comparar cada enlace con la ruta actual
+    menuLinks.forEach((link) => {
+        if (link.getAttribute('href').includes(currentPath.split('/').pop())) {
+            link.classList.add('active'); // Agregar la clase active si coincide
+        }
+    });
+});
+
+    </script>
+    
+    <!-- Menú de navegación -->
+    <nav class="menu-nav">
+        <ul>
+            <li><a href="../html/gestion_labs1.html">Laboratorios</a></li>
+            <li><a href="../html/gestion_usuarios.html">Usuarios</a></li>
+            <li><a href="../html/lista_de_registros.html">Registro de uso alumnos</a></li>
+            <li><a href="../html/registro_docentes.html">Registro de uso docentes</a></li>
+            <li><a href="../html/gestion_incidencia.html">Incidencias</a></li>
+            <li><a href="../html/gestion_reportes.html">Reportes</a></li>
+        </ul>
+    </nav>
+
+    <main class="main-container">
+        <section class="filter-container">
+            <div class="input-group">
+                <label for="searchLab">Laboratorio:</label>
+                <input type="text" id="searchLab" class="input-text" placeholder="Buscar laboratorio">
+            </div>
+            <div class="input-group">
+                <label for="searchBuilding">Edificio:</label>
+                <input type="text" id="searchBuilding" class="input-text" placeholder="Buscar edificio">
+            </div>
+            <div class="input-group">
+                <label for="searchTime">Horario:</label>
+                <input type="time" id="searchTime" class="input-text">
+            </div>
+            <button id="downloadExcel" class="search-button">Descargar Excel</button>
+        </section>
+
+        <section class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Laboratorio</th>
+                        <th>Edificio</th>
+                        <th>Horario</th>
+                        <th>Fecha</th>
+                        <th>Materia</th> <!-- Nueva columna -->
+                    </tr>
+                </thead>
+                
+                <tbody id="recordTableBody">
+                    <!-- Registros dinámicos -->
+                </tbody>
+            </table>
+        </section>
+
+        <section class="pagination">
+            <button id="prevPage" class="pagination-button">Anterior</button>
+            <span id="currentPage">1</span>
+            <button id="nextPage" class="pagination-button">Siguiente</button>
+        </section>
+    </main>
+
+    <script type="module" src="../js/regitro_docentes.js"></script>
+</body>
+</html>
