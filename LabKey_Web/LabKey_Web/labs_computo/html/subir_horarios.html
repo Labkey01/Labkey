@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cargar Horario Manual</title>
+    <link href="https://fonts.googleapis.com/css?family=Comfortaa" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="../../img/labkey_Mesa de trabajo 1.png">
+
+    <style>
+        body {
+            font-family: 'Comfortaa', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .header {
+            background-color: #e8e8e8;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #d1d1d1;
+        }
+
+        .header-logo img {
+            width: 70px;
+        }
+
+        .header-text h2 {
+            font-size: 24px;
+            color: #333;
+        }
+
+        .form-container, .table-container {
+            width: 90%;
+            margin: 20px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-container select, .form-container input {
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        .btn {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ccc;
+        }
+
+        th {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        .editable-cell {
+            background-color: #f9f9f9;
+            cursor: pointer;
+        }
+
+        .save-button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-logo">
+            <a href="../html/principal.html">
+                <img src="../../img/icons8-casa-manzana-100.png" alt="Home">
+            </a>
+        </div>
+        <div class="header-text">
+            <h2>Cargar Horario Manual</h2>
+        </div>
+        <div class="header-logo">
+            <img src="../../img/labkey_Mesa de trabajo 1.png" alt="LabKey Logo">
+        </div>
+    </header>
+
+    <div class="form-container">
+        <h3>Seleccionar Laboratorio</h3>
+        <select id="labSelect">
+            <option value="Laboratorio 1">Laboratorio 1</option>
+            <option value="Laboratorio 2">Laboratorio 2</option>
+            <option value="Laboratorio 3">Laboratorio 3</option>
+        </select>
+        <button class="btn" onclick="generateTable()">Generar Horario</button>
+    </div>
+
+    <div class="table-container" id="tableContainer" style="display: none;">
+        <h3>Horario Semanal</h3>
+        <div class="input-group">
+            <label>Docente:</label>
+            <input type="text" id="docente" placeholder="Ingrese el nombre del docente">
+        </div>
+        <div class="input-group">
+            <label>Grupo:</label>
+            <input type="text" id="grupo" placeholder="Ingrese el grupo">
+        </div>
+        <div class="input-group">
+            <label>Materia:</label>
+            <input type="text" id="materia" placeholder="Ingrese el nombre de la materia">
+        </div>
+        <button class="btn" onclick="applyToSelected()">Asignar a Horas Seleccionadas</button>
+        <table>
+            <thead>
+                <tr>
+                    <th>Hora</th>
+                    <th>Lunes</th>
+                    <th>Martes</th>
+                    <th>Miércoles</th>
+                    <th>Jueves</th>
+                    <th>Viernes</th>
+                </tr>
+            </thead>
+            <tbody id="scheduleTableBody">
+                <!-- Filas de horarios se generarán aquí -->
+            </tbody>
+        </table>
+        <button class="save-button" onclick="saveSchedule()">Guardar Horario</button>
+    </div>
+
+    <script>
+        const timeSlots = [
+            "7:00 a 7:30", "7:30 a 8:00", "8:00 a 8:30", "8:30 a 9:00",
+            "9:00 a 9:30", "9:30 a 10:00", "10:00 a 10:30", "10:30 a 11:00",
+            "11:00 a 11:30", "11:30 a 12:00", "12:00 a 12:30", "12:30 a 13:00",
+            "13:00 a 13:30", "13:30 a 14:00", "14:00 a 14:30", "14:30 a 15:00",
+            "15:00 a 15:30", "15:30 a 16:00", "16:00 a 16:30", "16:30 a 17:00"
+        ];
+
+        function generateTable() {
+            const tableBody = document.getElementById("scheduleTableBody");
+            tableBody.innerHTML = "";  // Limpiar tabla
+
+            timeSlots.forEach(slot => {
+                const row = document.createElement("tr");
+                row.innerHTML = `<td>${slot}</td>
+                                 <td class="editable-cell" onclick="selectCell(this)"></td>
+                                 <td class="editable-cell" onclick="selectCell(this)"></td>
+                                 <td class="editable-cell" onclick="selectCell(this)"></td>
+                                 <td class="editable-cell" onclick="selectCell(this)"></td>
+                                 <td class="editable-cell" onclick="selectCell(this)"></td>`;
+                tableBody.appendChild(row);
+            });
+
+            document.getElementById("tableContainer").style.display = "block";  // Mostrar tabla
+        }
+
+        const selectedCells = new Set();
+
+        function selectCell(cell) {
+            if (selectedCells.has(cell)) {
+                cell.style.backgroundColor = "";  // Desmarcar celda
+                selectedCells.delete(cell);
+            } else {
+                cell.style.backgroundColor = "#d3f8d3";  // Marcar celda
+                selectedCells.add(cell);
+            }
+        }
+
+        function applyToSelected() {
+            const docente = document.getElementById("docente").value;
+            const grupo = document.getElementById("grupo").value;
+            const materia = document.getElementById("materia").value;
+
+            const info = `${materia} - ${docente} - ${grupo}`;
+
+            selectedCells.forEach(cell => {
+                cell.innerText = info;
+                cell.style.backgroundColor = "";  // Desmarcar después de asignar
+            });
+            selectedCells.clear();
+        }
+
+        function saveSchedule() {
+            const rows = document.querySelectorAll("#scheduleTableBody tr");
+            const schedule = [];
+
+            rows.forEach(row => {
+                const time = row.cells[0].innerText;
+                const monday = row.cells[1].innerText;
+                const tuesday = row.cells[2].innerText;
+                const wednesday = row.cells[3].innerText;
+                const thursday = row.cells[4].innerText;
+                const friday = row.cells[5].innerText;
+
+                schedule.push({ time, monday, tuesday, wednesday, thursday, friday });
+            });
+
+            console.log("Horario Guardado:", schedule);
+            alert("Horario guardado correctamente.");
+        }
+    </script>
+</body>
+</html>
